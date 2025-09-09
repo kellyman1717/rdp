@@ -50,7 +50,9 @@ jobs:
         run: |
           # Test SSH connection to the VPS via Tailscale IP
           echo "Testing SSH connection to $TAILSCALE_IP"
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@$TAILSCALE_IP "echo 'SSH connection successful!'"
+          
+          # SSH with password authentication (root/root)
+          sshpass -p "root" ssh -o StrictHostKeyChecking=no root@$TAILSCALE_IP "echo 'SSH connection successful!'"
           
       - name: Maintain Connection
         run: |
