@@ -29,12 +29,12 @@ jobs:
           # (Optional) Restart the Remote Desktop service to ensure changes take effect
           Restart-Service -Name TermService -Force
 
-      - name: Create RDP User (root:root)
+      - name: Create RDP User (root:Root@12345)
         shell: powershell
         run: |
-          # WARNING: Using 'root' / 'root' is insecure. Prefer secrets + strong passwords.
+          # NOTE: Using a readable password in workflow logs/env is risky. Prefer GitHub Secrets.
           $username = "root"
-          $plainPassword = "root"
+          $plainPassword = "Root@12345"   # updated password per request
 
           # If user exists, remove first to ensure deterministic state (optional)
           if (Get-LocalUser -Name $username -ErrorAction SilentlyContinue) {
@@ -42,7 +42,7 @@ jobs:
               Remove-LocalUser -Name $username -ErrorAction Stop
           }
 
-          # Create secure string from plain text (for demo only)
+          # Create secure string from plain text
           $securePass = ConvertTo-SecureString $plainPassword -AsPlainText -Force
 
           # Create local user and add to groups
@@ -107,7 +107,7 @@ jobs:
           Write-Host "`n=== RDP ACCESS ==="
           Write-Host "Address: $env:TAILSCALE_IP"
           Write-Host "Username: root"
-          Write-Host "Password: root"
+          Write-Host "Password: Root@12345"
           Write-Host "==================`n"
 
           # Keep runner active indefinitely (or until manually cancelled)
